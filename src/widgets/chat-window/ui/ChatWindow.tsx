@@ -1,3 +1,4 @@
+import { MessageInput } from '@/features/send-message/ui/MessageInput';
 import st from './ChatWindow.module.css';
 import { MessageList } from './MessageList';
 
@@ -25,6 +26,7 @@ export const ChatWindow = () => {
         </div>
       </header>
       <MessageList messages={mockMessages} />
+      <MessageInput />
     </section>
   );
 };

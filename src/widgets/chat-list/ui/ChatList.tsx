@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import st from './ChatList.module.css';
+import { StartChatModal } from '@/features/start-chat/ui/StartChatModal';
 // fixme: временный мок .
 const mockChats = [
   //chatId, phone, messages, unreadCount
@@ -26,6 +27,7 @@ const mockChats = [
 export function ChatList() {
   const [active, setActive] = useState(mockChats[0].chatId);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const isOpen = isSidebarOpen || !active;
 
@@ -41,6 +43,7 @@ export function ChatList() {
               type='button'
               aria-label='Новый чат'
               title='Новый чат'
+              onClick={() => setIsModalOpen(true)}
             >
               +
             </button>
@@ -107,6 +110,8 @@ export function ChatList() {
           {isSidebarOpen ? '<' : 'Чаты'}
         </button>
       )}
+
+      {isModalOpen && <StartChatModal onClose={() => setIsModalOpen(false)} />}
     </>
   );
 }
