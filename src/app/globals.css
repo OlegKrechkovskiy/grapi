@@ -1,6 +1,13 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Примерно палитра вотс */
+  --wa-header-from: #00a884;
+  --wa-header-to: #008069;
+  --wa-bg: #51555a;
+  --wa-panel: #f0f2f5;
+  --wa-outgoing: #d9fdd3;
+  --wa-incoming: #ffffff;
+  --wa-accent: #00a884;
+  --wa-text: #111b21;
 }
 
 html,
