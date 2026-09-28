@@ -1,0 +1,42 @@
+.bubble {
+  min-width: 160px;
+  max-width: 65%;
+  padding: 6px 8px 8px 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.13);
+  position: relative;
+  word-wrap: break-word;
+}
+
+.incoming {
+  background: #ffffff;
+  align-self: flex-start;
+  border-top-left-radius: 2px;
+}
+
+.outgoing {
+  background: #d9fdd3;
+  align-self: flex-end;
+  border-top-right-radius: 2px;
+}
+
+.text {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.35;
+  white-space: pre-wrap;
+}
+
+.time {
+  float: right;
+  margin-left: 8px;
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.45);
+  line-height: 1.4;
+}
+
+.check {
+  color: #53bdeb;
+  margin-right: 3px;
+  font-size: 12px;
+}

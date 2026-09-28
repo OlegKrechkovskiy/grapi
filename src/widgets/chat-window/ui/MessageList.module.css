@@ -1,0 +1,12 @@
+.list {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  background-color: #ece5dd;
+  background-image: url(/wtpp_backgr.svg);
+  background-blend-mode: soft-light;
+}
