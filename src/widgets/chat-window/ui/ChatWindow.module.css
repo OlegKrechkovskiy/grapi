@@ -43,3 +43,13 @@
   font-size: 15px;
   font-weight: 500;
 }
+
+@media screen and (max-width:768px) {
+  .header {
+    justify-content: center;
+    border-bottom: 1px solid #d1d7db;
+  }
+  .info {
+    flex: initial;
+  }
+}

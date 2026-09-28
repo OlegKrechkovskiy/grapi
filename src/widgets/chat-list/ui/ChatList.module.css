@@ -43,3 +43,145 @@
   align-items: center;
   justify-content: center;
 }
+
+.list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.empty {
+  padding: 16px;
+  text-align: center;
+  color: #667781;
+  font-size: 14px;
+}
+
+.chatItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.chatItem:hover {
+  background: #f5f6f6;
+}
+
+.chatItem.active {
+  background: #f0f2f5;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #00a884;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.phone {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.preview {
+  font-size: 13px;
+  color: #667781;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  background: #00a884;
+  color: #ffffff;
+  font-size: 12px;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  flex-shrink: 0;
+}
+
+.icon {
+  display: none;
+}
+
+.toggleButton {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: space-between;
+  }
+  .icon {
+    display: block;
+  }
+  .title {
+    text-align: center;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    min-width: 0;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    z-index: 400;
+    border-right: none;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .toggleButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    z-index: 400;
+    padding: 8px 16px;
+    border: none;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    color: #000000;
+    background: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .toggleButton.open {
+    background: #f7f5f3;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  }
+}
