@@ -1,35 +1,31 @@
 'use client';
 
+import { useChatStore } from '@/entities/chat/model/chatStore';
+import { StartChatModal } from '@/features/start-chat/ui/StartChatModal';
 import { useState } from 'react';
 import st from './ChatList.module.css';
-import { StartChatModal } from '@/features/start-chat/ui/StartChatModal';
-// fixme: временный мок .
-const mockChats = [
-  //chatId, phone, messages, unreadCount
-  {
-    chatId: 1,
-    phone: '79897776655',
-    messages: [
-      { id: 1, text: 'Привет' },
-      { id: 2, text: 'Как дела?' },
-    ],
-    unreadCount: 0,
-  },
-  { chatId: 2, phone: '89897776632', messages: [], unreadCount: 0 },
-  {
-    chatId: 3,
-    phone: '89897336655',
-    messages: [{ id: 1, text: 'Отправляй' }],
-    unreadCount: 0,
-  },
-];
 
 export function ChatList() {
-  const [active, setActive] = useState(mockChats[0].chatId);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const chats = useChatStore((state) => state.chats);
+  const activeChatId = useChatStore((state) => state.activeChatId);
+  const setActiveChat = useChatStore((state) => state.setActiveChat);
+  const logout = useChatStore((state) => state.logout);
 
-  const isOpen = isSidebarOpen || !active;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const isOpen = isSidebarOpen || !activeChatId;
+
+  const handleSelectChat = (chatid: string) => {
+    setActiveChat(chatid);
+    setIsSidebarOpen(false);
+  };
+
+  const handleExit = () => {
+    if (window.confirm('Вы уверены, что хотите выйти?')) {
+      logout();
+    }
+  };
 
   return (
     <>
@@ -43,13 +39,17 @@ export function ChatList() {
               type='button'
               aria-label='Новый чат'
               title='Новый чат'
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                setIsModalOpen(true);
+                setIsSidebarOpen(false);
+              }}
             >
               +
             </button>
             <button
               className={st.iconButton}
               type='button'
+              onClick={handleExit}
               aria-label='Выйти'
               title='Выйти'
             >
@@ -72,15 +72,15 @@ export function ChatList() {
           </div>
         </header>
         <div className={st.list}>
-          {mockChats.length === 0 && (
+          {chats.length === 0 && (
             <p className={st.empty}>Нажмите «+», чтобы начать чат</p>
           )}
-          {mockChats.map((chat) => (
+          {chats.map((chat) => (
             <button
               key={chat.chatId}
-              className={`${st.chatItem} ${chat.chatId === active && st.active}`}
+              className={`${st.chatItem} ${chat.chatId === activeChatId && st.active}`}
               type='button'
-              onClick={() => (setActive(chat.chatId), setIsSidebarOpen(true))}
+              onClick={() => handleSelectChat(chat.chatId)}
             >
               <div className={st.avatar}>{chat.phone.charAt(0)}</div>
               <div className={st.info}>
@@ -95,11 +95,11 @@ export function ChatList() {
           ))}
         </div>
       </aside>
-      {active && (
+      {activeChatId && (
         <button
           type='button'
+          className={`${st.toggleButton} ${isOpen ? st.open : ''}`}
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className={st.toggleButton}
           aria-label={
             isSidebarOpen ? 'Скрыть список чатов' : 'Показать список чатов'
           }

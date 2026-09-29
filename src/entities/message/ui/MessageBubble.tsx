@@ -1,11 +1,8 @@
+import { ChatMessage } from '../model/types';
 import st from './MessageBubble.module.css';
 
 interface MessageBubbleProps {
-  message: {
-    id: number;
-    text: string;
-    incoming: boolean;
-  };
+  message: ChatMessage;
 }
 
 export const MessageBubble = ({ message }: MessageBubbleProps) => {
