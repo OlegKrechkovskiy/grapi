@@ -2,6 +2,12 @@
 
 Веб-приложение-мессенджер в стиле WhatsApp Web для отправки и получения **текстовых** сообщений через сервис [GREEN-API](https://green-api.com).
 
+## Демо
+
+Рабочее демо приложения развёрнуто на Vercel:
+
+[https://grapi-mess.vercel.app/](https://grapi-mess.vercel.app/)
+
 ## Возможности
 
 - Вход по учётным данным инстанса GREEN-API (`idInstance`, `apiTokenInstance`, `apiUrl`) с проверкой на сервере
