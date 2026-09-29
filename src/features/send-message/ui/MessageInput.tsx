@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef } from 'react';
 
 import { useChatStore } from '@/entities/chat/model/chatStore';
 import { MAX_TEXTAREA_HEIGHT_PX } from '@/shared/config/constants';
-
+import { useSendMessage } from '../model/useSendMessage';
 import st from './MessageInput.module.css';
 
 export const MessageInput = () => {
@@ -34,17 +34,29 @@ export const MessageInput = () => {
     el.style.height = `${Math.min(el.scrollHeight, MAX_TEXTAREA_HEIGHT_PX)}px`;
   }, [draft]);
 
+  const { isSending, error, send } = useSendMessage();
+
+  // Отправка: при успехе очищаем черновик текущего чата
+  const handleSend = async () => {
+    const ok = await send(draft);
+    if (ok && activeChatId) {
+      clearDraft(activeChatId);
+    }
+  };
+
   // Enter отправляет сообщение (Shift+Enter — перенос строки)
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      // отправить сообщение
+      void handleSend();
       return;
     }
   };
 
   return (
     <div className={st.container}>
+      {error && <p className={st.error}>{error}</p>}
+
       <div className={st.row}>
         <textarea
           ref={textareaRef}
@@ -65,7 +77,8 @@ export const MessageInput = () => {
           className={st.button}
           type='button'
           aria-label='Отправить сообщение'
-          // onClick={отправить сообщение}
+          disabled={isSending || !draft.trim()}
+          onClick={() => void handleSend()}
           title='Отправить сообщение'
         >
           ▶

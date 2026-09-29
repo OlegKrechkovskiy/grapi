@@ -40,19 +40,32 @@ function buildUrl(
   return `${apiUrl}/waInstance${idInstance}/${method}/${apiTokenInstance}${extraPath}`;
 }
 
-/**
- * Обёртка над fetch: выполняет запрос, проверяет HTTP-статус, возвращает JSON.
- *
- * @throws Error - при HTTP-ошибке (401 = неверные учётные данные и т.п.).
- */
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init);
+  const { method = 'GET', body } = init ?? {};
+
+  // Все запросы к GREEN-API идут через серверный прокси /api/green-api,
+  // чтобы обойти CORS, и видеть статусы ошибок для обработки
+  const res = await fetch('/api/green-api', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      url,
+      method,
+      body: typeof body === 'string' && body ? JSON.parse(body) : undefined,
+    }),
+  });
 
   if (!res.ok) {
     throw new Error(`GREEN-API error ${res.status}: ${res.statusText}`);
   }
 
-  return (await res.json()) as T;
+  const text = await res.text();
+
+  if (!text) {
+    return undefined as T;
+  }
+
+  return JSON.parse(text) as T;
 }
 
 /**
@@ -109,7 +122,6 @@ interface CheckWhatsappResponse {
   chatId?: string;
 }
 
-
 /**
  * Проверяет, зарегистрирован ли номер в WhatsApp (метод checkWhatsapp).
  *
@@ -131,4 +143,16 @@ export function checkWhatsapp(
       force: false,
     }),
   });
+}
+
+/**
+ * Проверяем учётные данные
+ * Возвращает 200 при валидных данных и 401 при неверных
+ * idInstance / apiTokenInstance.
+ */
+export function getStateInstance(
+  credentials: InstanceCredentials,
+): Promise<{ stateInstance: string }> {
+  const url = buildUrl(credentials, 'getStateInstance');
+  return request<{ stateInstance: string }>(url);
 }
