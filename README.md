@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GRAPI — чат-клиент на базе GREEN-API (WhatsApp)
 
-## Getting Started
+Веб-приложение-мессенджер в стиле WhatsApp Web для отправки и получения **текстовых** сообщений через сервис [GREEN-API](https://green-api.com).
 
-First, run the development server:
+## Возможности
+
+- Вход по учётным данным инстанса GREEN-API (`idInstance`, `apiTokenInstance`, `apiUrl`) с проверкой на сервере
+- Создание нового чата по номеру телефона (проверка номера через `checkWhatsapp`)
+- Отправка текстовых сообщений методом `SendMessage`
+- Получение входящих сообщений по технологии HTTP API (поллинг очереди уведомлений `receiveNotification` / `deleteNotification`)
+- Список чатов с превью последнего сообщения и счётчиком непрочитанных
+- Черновики сообщений по каждому чату (сохраняются между сессиями)
+- Баннер о недоступности интернета
+- Адаптивная вёрстка (на мобильных сайдбар сворачивается)
+
+## Требования
+
+- Node.js **20.9+** (рекомендуется 22 LTS)
+- npm
+
+## Установка
+
+```bash
+npm install
+```
+
+## Запуск в режиме разработки
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Открой [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Скрипты
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Команда | Описание |
+|---|---|
+| `npm run dev` | Запуск dev-сервера |
+| `npm run build` | Продакшен-сборка |
+| `npm run start` | Запуск продакшен-сборки |
+| `npm run lint` | Проверка линтером (ESLint) |
+| `npm run typecheck` | Проверка типов (tsc --noEmit) |
 
-## Learn More
+## Настройка
 
-To learn more about Next.js, take a look at the following resources:
+### Учётные данные
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Для работы приложения нужен инстанс WhatsApp в [кабинете GREEN-API](https://console.green-api.com). Данные для входа:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `idInstance` — идентификатор инстанса (например `1101000001`)
+- `apiTokenInstance` — токен инстанса
+- `apiUrl` — адрес API (домен, указанный в настройках инстанса)
 
-## Deploy on Vercel
+## Как пользоваться
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Запусти приложение и введи учётные данные GREEN-API → «Войти»
+2. Нажми **«+»** в шапке списка чатов → введи номер собеседника → «Создать»
+3. Выбери чат и напиши сообщение (Enter — отправить, Shift+Enter — перенос строки)
+4. Ответы собеседника появляются в чате автоматически
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Технологии
+
+- [Next.js](https://nextjs.org) 16 (App Router)
+- [React](https://react.dev) 19
+- [TypeScript](https://www.typescriptlang.org)
+- [Zustand](https://github.com/pmndrs/zustand) + persist (localStorage)
+- CSS Modules
+
+## Структура проекта
+
+Проект организован по методологии Feature-Sliced Design (упрощённо):
+
+```
+src/
+├── app/                  # Страницы и серверные роуты
+│   ├── api/green-api/    # Прокси запросов к GREEN-API (обход CORS)
+│   └── page.tsx          # Главная страница (вход / чат)
+├── entities/
+│   ├── chat/             # Модель чата: типы, zustand-стор
+│   └── message/          # Модель сообщения: типы, пузырь сообщения
+├── features/
+│   ├── connect-instance/ # Экран входа и проверка учётных данных
+│   ├── receive-messages/ # Поллинг входящих сообщений
+│   ├── send-message/     # Отправка сообщений и поле ввода
+│   └── start-chat/       # Создание нового чата
+├── shared/
+│   ├── api/              # Клиент GREEN-API
+│   ├── config/           # Константы
+│   └── lib/              # Утилиты и хуки
+└── widgets/
+    ├── chat-list/        # Список чатов
+    ├── chat-window/      # Окно диалога
+    └── offline-banner/   # Баннер оффлайн
+```
+
+## Особенности реализации
+
+- **Прокси CORS.** Запросы к GREEN-API идут через серверный роут `/api/green-api`: WAF перед GREEN-API не отдаёт CORS-заголовки на ответы об ошибках (401/404), из-за чего браузер превращал их в `Failed to fetch`. Прокси возвращает реальные HTTP-статусы, поэтому приложение корректно показывает ошибки входа («Неверные учётные данные», «Инстанс не найден» и т.д.).
+- **Поллинг очереди.** Входящие сообщения читаются через `receiveNotification`, после обработки уведомление обязательно удаляется (`deleteNotification`), иначе оно блокирует очередь.
+- **Хранение данных.** Чаты, черновики и учётные данные сохраняются в localStorage (zustand persist). История сообщений хранится локально.

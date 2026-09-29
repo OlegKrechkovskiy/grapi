@@ -10,7 +10,7 @@ import st from './SettingsPanel.module.css';
 export function SettingsPanel() {
   const [idInstance, setIdInstance] = useState('');
   const [apiTokenInstance, setApiTokenInstance] = useState('');
-  const [apiUrl, setApiUrl] = useState(DEFAULT_API_URL);
+  const [apiUrl, setApiUrl] = useState('');
 
   const { error, isChecking, submit } = useLogin();
 
