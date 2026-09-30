@@ -52,11 +52,20 @@ npm run dev
 
 ### Учётные данные
 
-Для работы приложения нужен инстанс WhatsApp в [кабинете GREEN-API](https://console.green-api.com). Данные для входа:
+Для работы приложения нужен инстанс WhatsApp в [кабинете GREEN-API](https://console.green-api.com).
+
+- [Регистрация в Личном кабинете](https://green-api.com/docs/before-start/#cabinet)
+- [Создание и авторизация инстанса](https://green-api.com/docs/before-start/#instance)
+
+
+Данные для входа:
 
 - `idInstance` — идентификатор инстанса (например `1101000001`)
 - `apiTokenInstance` — токен инстанса
 - `apiUrl` — адрес API (домен, указанный в настройках инстанса)
+
+ 
+![Учётные данные GREEN-API](public/grapi_help_data.jpg)
 
 ## Как пользоваться
 
