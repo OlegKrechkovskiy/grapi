@@ -16,8 +16,13 @@ interface ChatState {
 
   login(instance: InstanceSettings): void;
   logout(): void;
-  // addChat(chatId: string, phone: string, messages: []): void;
-  addChat(chatId: string, phone: string, messages?: ChatMessage[], senderChatName?: string): void;
+  addChat(
+    chatId: string,
+    phone: string,
+    messages?: ChatMessage[],
+    senderChatName?: string,
+  ): void;
+  removeChat(chatId: string): void;
   setActiveChat(chatId: string | null): void;
   setDraft(chatId: string, text: string): void;
   clearDraft(chatId: string): void;
@@ -74,6 +79,18 @@ export const useChatStore = create<ChatState>()(
               ...state.chats,
               { chatId, phone, messages, senderChatName, unreadCount: 0 },
             ],
+          };
+        }),
+
+      removeChat: (chatId) =>
+        set((state) => {
+          const drafts = { ...state.drafts };
+          delete drafts[chatId];
+          return {
+            chats: state.chats.filter((c) => c.chatId !== chatId),
+            activeChatId:
+              state.activeChatId === chatId ? null : state.activeChatId,
+            drafts,
           };
         }),
 
