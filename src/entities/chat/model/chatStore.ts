@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 
 import { STORAGE_KEY } from '@/shared/config/constants';
 import type { Chat, InstanceSettings } from './types';
+import type { ChatMessage } from '@/entities/message/model/types';
 
 /** Состояние и экшены стора чата. */
 interface ChatState {
@@ -15,12 +16,18 @@ interface ChatState {
 
   login(instance: InstanceSettings): void;
   logout(): void;
-  addChat(chatId: string, phone: string): void;
+  // addChat(chatId: string, phone: string, messages: []): void;
+  addChat(chatId: string, phone: string, messages?: ChatMessage[], senderChatName?: string): void;
   setActiveChat(chatId: string | null): void;
   setDraft(chatId: string, text: string): void;
   clearDraft(chatId: string): void;
   addOutgoing(chatId: string, text: string, idMessage: string): void;
-  addIncoming(chatId: string, text: string, timestampSec: number, senderChatName?: string): void;
+  addIncoming(
+    chatId: string,
+    text: string,
+    timestampSec: number,
+    senderChatName?: string,
+  ): void;
   ensureChat(chatId: string): void;
   setError(error: string | null): void;
 }
@@ -57,18 +64,15 @@ export const useChatStore = create<ChatState>()(
           };
         }),
 
-      logout: () =>
-        set({ instance: null, activeChatId: null, error: null }),
+      logout: () => set({ instance: null, activeChatId: null, error: null }),
 
-      addChat: (chatId, phone) =>
+      addChat: (chatId, phone, messages = [], senderChatName = '') =>
         set((state) => {
-          if (state.chats.some((c) => c.chatId === chatId)) {
-            return state;
-          }
+          if (state.chats.some((c) => c.chatId === chatId)) return state;
           return {
             chats: [
               ...state.chats,
-              { chatId, phone, messages: [], senderChatName: '', unreadCount: 0 },
+              { chatId, phone, messages, senderChatName, unreadCount: 0 },
             ],
           };
         }),

@@ -8,3 +8,5 @@ export const CHAT_ID_SUFFIX = '@c.us';
 export const STORAGE_KEY = 'grapi-storage';
 
 export const MAX_TEXTAREA_HEIGHT_PX = 160;
+
+export const COUNT_HISTORY_MESSAGES = Number(process.env.NEXT_PUBLIC_COUNT_MESSAGES) ?? 5;
