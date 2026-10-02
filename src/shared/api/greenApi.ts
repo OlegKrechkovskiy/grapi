@@ -147,6 +147,34 @@ export function checkWhatsapp(
   });
 }
 
+
+interface ContactInfo {
+  name: string;
+  phone?: string;
+  avatar?: string;
+}
+
+/**
+ * Возвращает информацию о контакте (метод getContactInfo).
+ *
+ * @param credentials - учётные данные инстанса.
+ * @param chatId - получатель вида "79991234567@c.us".
+ */
+export function getContactInfo(
+  credentials: InstanceCredentials,
+  chatId: string,
+): Promise<ContactInfo> {
+  const url = buildUrl(credentials, 'getContactInfo');
+
+  return request<ContactInfo>(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chatId: chatId,
+    }),
+  });
+}
+
 interface HistoryMessage {
   idMessage: string;
   timestamp: number;

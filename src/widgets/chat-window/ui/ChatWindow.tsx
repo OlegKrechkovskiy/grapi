@@ -35,9 +35,13 @@ export const ChatWindow = () => {
     <section className={st.window}>
       <header className={st.header}>
         <div className={st.avatar}>
-          {activeChat.senderChatName
-            ? activeChat.senderChatName.charAt(0)
-            : activeChat.phone.charAt(0)}
+          {activeChat.avatar ? (
+            <img src={activeChat.avatar} alt={activeChat.senderChatName} className={st.image} />
+          ) : activeChat.senderChatName ? (
+            activeChat.senderChatName.charAt(0)
+          ) : (
+            activeChat.phone.charAt(0)
+          )}
         </div>
         <div className={st.info}>
           {activeChat.senderChatName && (

@@ -8,5 +8,6 @@ export interface Chat {
   phone: string;
   messages: ChatMessage[];
   senderChatName: string;
+  avatar: string;
   unreadCount: number;
 }

@@ -82,18 +82,34 @@ export function ChatList() {
               type='button'
               onClick={() => handleSelectChat(chat.chatId)}
             >
-              <div className={st.avatar}>{chat.senderChatName ? chat.senderChatName.charAt(0) : chat.phone.charAt(0)}</div>
-              {/* <div className={st.avatar}>{chat.phone.charAt(0)}</div> */}
+              <div className={st.avatar}>
+                {chat.avatar ? (
+                  <img src={chat.avatar} alt={chat.senderChatName} className={st.image} />
+                ) : chat.senderChatName ? (
+                  chat.senderChatName.charAt(0)
+                ) : (
+                  chat.phone.charAt(0)
+                )}
+              </div>
               <div className={st.info}>
-                {chat.senderChatName && <div className={st.name}>{chat.senderChatName}</div>}
-                <div className={st.phone}>{chat.phone}</div>
+                {chat.senderChatName ? (
+                  <div className={st.name}>{chat.senderChatName}</div>
+                ):(
+                  <div className={st.phone}>{chat.phone}</div>
+                )}
                 <div className={st.preview}>
                   {chat.messages.length > 0
                     ? chat.messages[chat.messages.length - 1].text
                     : 'Нет сообщений'}
                 </div>
                 {chat.unreadCount > 0 && (
-                  <div className={st.badge} title={`Новых сообщений: ${chat.unreadCount}`} aria-label={`Новых сообщений: ${chat.unreadCount}`}>{chat.unreadCount}</div>
+                  <div
+                    className={st.badge}
+                    title={`Новых сообщений: ${chat.unreadCount}`}
+                    aria-label={`Новых сообщений: ${chat.unreadCount}`}
+                  >
+                    {chat.unreadCount}
+                  </div>
                 )}
               </div>
             </button>

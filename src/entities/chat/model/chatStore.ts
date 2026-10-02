@@ -21,6 +21,7 @@ interface ChatState {
     phone: string,
     messages?: ChatMessage[],
     senderChatName?: string,
+    avatar?: string,
   ): void;
   removeChat(chatId: string): void;
   setActiveChat(chatId: string | null): void;
@@ -71,13 +72,26 @@ export const useChatStore = create<ChatState>()(
 
       logout: () => set({ instance: null, activeChatId: null, error: null }),
 
-      addChat: (chatId, phone, messages = [], senderChatName = '') =>
+      addChat: (
+        chatId,
+        phone,
+        messages = [],
+        senderChatName = '',
+        avatar = '',
+      ) =>
         set((state) => {
           if (state.chats.some((c) => c.chatId === chatId)) return state;
           return {
             chats: [
               ...state.chats,
-              { chatId, phone, messages, senderChatName, unreadCount: 0 },
+              {
+                chatId,
+                phone,
+                messages,
+                senderChatName,
+                avatar,
+                unreadCount: 0,
+              },
             ],
           };
         }),
@@ -172,6 +186,7 @@ export const useChatStore = create<ChatState>()(
                 phone: phoneFromChatId(chatId),
                 messages: [],
                 senderChatName: '',
+                avatar: '',
                 unreadCount: 0,
               },
             ],
