@@ -34,9 +34,9 @@ export const StartChatModal = ({ onClose }: StartChatModalProps) => {
           <input
             className={st.input}
             type='tel'
-            placeholder='+7 (999) 123-45-67'
+            placeholder='+7(999)123-45-67'
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => setPhone(e.target.value.replace(/[^\d+()\-]/g, ''))}
             autoFocus
           />
         </label>

@@ -30,7 +30,7 @@ export function SettingsPanel() {
             type='text'
             placeholder='1101000001'
             value={idInstance}
-            onChange={(e) => setIdInstance(e.target.value)}
+            onChange={(e) => setIdInstance(e.target.value.replace(/\D/g, ''))}
           />
         </label>
 
