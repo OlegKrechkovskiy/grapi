@@ -3,7 +3,6 @@
 import { useState } from 'react';
 
 import { useLogin } from '../model/useLogin';
-import { DEFAULT_API_URL } from '@/shared/config/constants';
 
 import st from './SettingsPanel.module.css';
 

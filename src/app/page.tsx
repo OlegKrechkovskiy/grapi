@@ -10,7 +10,7 @@ import st from './page.module.css';
 
 export default function Home() {
   // учетка из локального хранилища (пока так, пока не реализована авторизация)
-  const isntance = useChatStore((state) => state.instance);
+  const instance = useChatStore((state) => state.instance);
 
   useReceiveMessages();
 
@@ -18,7 +18,7 @@ export default function Home() {
     <>
       <OfflineBanner />
 
-      {!isntance ? (
+      {!instance ? (
         <SettingsPanel />
       ) : (
         <div className={st.app}>

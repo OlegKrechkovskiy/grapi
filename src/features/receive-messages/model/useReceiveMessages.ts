@@ -57,6 +57,9 @@ export function useReceiveMessages(): void {
           const messageData = body.messageData;
           const text = messageData?.textMessageData?.textMessage;
           const senderChatId = body.senderData?.chatId;
+          const senderChatName = body.senderData?.chatName
+            ? body.senderData.chatName
+            : '';
 
           const isIncomingText =
             body.typeWebhook === WEBHOOK_INCOMING_MESSAGE &&
@@ -70,6 +73,7 @@ export function useReceiveMessages(): void {
               senderChatId,
               text,
               body.timestamp ?? Math.floor(Date.now() / 1000),
+              senderChatName,
             );
           }
 

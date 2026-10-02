@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 
 import { STORAGE_KEY } from '@/shared/config/constants';
 import type { Chat, InstanceSettings } from './types';
+import type { ChatMessage } from '@/entities/message/model/types';
 
 /** Состояние и экшены стора чата. */
 interface ChatState {
@@ -15,12 +16,23 @@ interface ChatState {
 
   login(instance: InstanceSettings): void;
   logout(): void;
-  addChat(chatId: string, phone: string): void;
+  addChat(
+    chatId: string,
+    phone: string,
+    messages?: ChatMessage[],
+    senderChatName?: string,
+  ): void;
+  removeChat(chatId: string): void;
   setActiveChat(chatId: string | null): void;
   setDraft(chatId: string, text: string): void;
   clearDraft(chatId: string): void;
   addOutgoing(chatId: string, text: string, idMessage: string): void;
-  addIncoming(chatId: string, text: string, timestampSec: number): void;
+  addIncoming(
+    chatId: string,
+    text: string,
+    timestampSec: number,
+    senderChatName?: string,
+  ): void;
   ensureChat(chatId: string): void;
   setError(error: string | null): void;
 }
@@ -57,19 +69,28 @@ export const useChatStore = create<ChatState>()(
           };
         }),
 
-      logout: () =>
-        set({ instance: null, activeChatId: null, error: null }),
+      logout: () => set({ instance: null, activeChatId: null, error: null }),
 
-      addChat: (chatId, phone) =>
+      addChat: (chatId, phone, messages = [], senderChatName = '') =>
         set((state) => {
-          if (state.chats.some((c) => c.chatId === chatId)) {
-            return state;
-          }
+          if (state.chats.some((c) => c.chatId === chatId)) return state;
           return {
             chats: [
               ...state.chats,
-              { chatId, phone, messages: [], unreadCount: 0 },
+              { chatId, phone, messages, senderChatName, unreadCount: 0 },
             ],
+          };
+        }),
+
+      removeChat: (chatId) =>
+        set((state) => {
+          const drafts = { ...state.drafts };
+          delete drafts[chatId];
+          return {
+            chats: state.chats.filter((c) => c.chatId !== chatId),
+            activeChatId:
+              state.activeChatId === chatId ? null : state.activeChatId,
+            drafts,
           };
         }),
 
@@ -113,7 +134,7 @@ export const useChatStore = create<ChatState>()(
           ),
         })),
 
-      addIncoming: (chatId, text, timestampSec) =>
+      addIncoming: (chatId, text, timestampSec, senderChatName) =>
         set((state) => ({
           chats: state.chats.map((c) =>
             c.chatId === chatId
@@ -128,6 +149,7 @@ export const useChatStore = create<ChatState>()(
                       incoming: true,
                     },
                   ],
+                  senderChatName: senderChatName || '',
                   unreadCount:
                     c.chatId === state.activeChatId
                       ? c.unreadCount
@@ -149,6 +171,7 @@ export const useChatStore = create<ChatState>()(
                 chatId,
                 phone: phoneFromChatId(chatId),
                 messages: [],
+                senderChatName: '',
                 unreadCount: 0,
               },
             ],

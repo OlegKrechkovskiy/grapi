@@ -61,12 +61,42 @@
   font-weight: 500;
 }
 
+.phone {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.delete {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.delete svg {
+  width: 16px;
+}
+
+.delete:hover {
+  color: #ff593c;
+}
+
 @media screen and (max-width:768px) {
   .header {
     justify-content: center;
     border-bottom: 1px solid #d1d7db;
   }
+
   .info {
     flex: initial;
+  }
+
+  .delete {
+    position: absolute;
+    top: 10px;
+    right: 16px;
   }
 }

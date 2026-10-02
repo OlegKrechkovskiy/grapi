@@ -7,5 +7,6 @@ export interface Chat {
   chatId: string;
   phone: string;
   messages: ChatMessage[];
+  senderChatName: string;
   unreadCount: number;
 }

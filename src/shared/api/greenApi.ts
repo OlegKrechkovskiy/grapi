@@ -1,3 +1,5 @@
+import { COUNT_HISTORY_MESSAGES } from '@/shared/config/constants';
+
 export interface InstanceCredentials {
   idInstance: string;
   apiTokenInstance: string;
@@ -10,7 +12,7 @@ export interface IncomingNotification {
     typeWebhook: string;
     senderData?: {
       chatId?: string;
-      senderName?: string;
+      chatName?: string;
     };
     messageData?: {
       typeMessage?: string;
@@ -141,6 +143,39 @@ export function checkWhatsapp(
     body: JSON.stringify({
       phoneNumber: Number(phone),
       force: false,
+    }),
+  });
+}
+
+interface HistoryMessage {
+  idMessage: string;
+  timestamp: number;
+  typeMessage: string;
+  chatId: string;
+  textMessage?: string;
+  senderId?: string;
+  senderName?: string;
+  type?: string;
+}
+
+/**
+ * Проверяет историю чата (метод getChatHistory).
+ *
+ * @param credentials - учётные данные инстанса.
+ * @param chatId - получатель вида "79991234567@c.us".
+ */
+export function checkHistory(
+  credentials: InstanceCredentials,
+  chatId: string,
+): Promise<HistoryMessage[]> {
+  const url = buildUrl(credentials, 'getChatHistory');
+  const countMessages = COUNT_HISTORY_MESSAGES;
+
+  return request<HistoryMessage[]>(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      chatId: chatId,
+      count: countMessages,
     }),
   });
 }

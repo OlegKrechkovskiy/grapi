@@ -8,7 +8,7 @@
 import { useState } from 'react';
 
 import { useChatStore } from '@/entities/chat/model/chatStore';
-import { checkWhatsapp } from '@/shared/api/greenApi';
+import { checkHistory, checkWhatsapp } from '@/shared/api/greenApi';
 import { normalizePhone } from '@/shared/lib/normalizePhone';
 import { CHAT_ID_SUFFIX } from '@/shared/config/constants';
 
@@ -48,8 +48,24 @@ export function useStartChat(): UseStartChatResult {
       }
 
       const targetChatId = `${phone}${CHAT_ID_SUFFIX}`;
+      const history = await checkHistory(instance, targetChatId);
+      const senderName =
+        history.find((m) => m.senderId === targetChatId)?.senderName ?? '';
+      const messages = (history.length ? history : [])
+        .filter(
+          (m) =>
+            m.typeMessage === 'extendedTextMessage' ||
+            m.typeMessage === 'textMessage',
+        )
+        .map((m) => ({
+          id: m.idMessage,
+          text: m.textMessage ?? '',
+          timestamp: m.timestamp * 1000,
+          incoming: m.senderId === targetChatId,
+        }))
+        .reverse();
 
-      addChat(targetChatId, phone);
+      addChat(targetChatId, phone, messages, senderName);
       setActiveChat(targetChatId);
 
       return true;

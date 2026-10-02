@@ -12,7 +12,7 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
     <p className={st.text}>{message.text}</p>
     <span className={st.time}>
       {!message.incoming && <span className={st.check}>✓</span>}
-      12:00
+      {new Date(message.timestamp).toLocaleTimeString()}
     </span>
   </div>;
 };
