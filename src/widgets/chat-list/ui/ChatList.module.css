@@ -91,12 +91,18 @@
 }
 
 .info {
+  position: relative;
   flex: 1;
   min-width: 0;
 }
 
-.phone {
+.name {
   font-size: 15px;
+  font-weight: 500;
+}
+
+.phone {
+  font-size: 13px;
   font-weight: 500;
 }
 
@@ -109,17 +115,21 @@
 }
 
 .badge {
-  background: #00a884;
-  color: #ffffff;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
   font-size: 12px;
-  min-width: 20px;
-  height: 20px;
-  border-radius: 10px;
+  min-width: 30px;
+  height: 30px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 6px;
   flex-shrink: 0;
+  color: #ffffff;
+  background: #00a884;
 }
 
 .icon {
@@ -136,9 +146,11 @@
     grid-template-columns: 1fr 1fr 1fr;
     justify-content: space-between;
   }
+
   .icon {
     display: block;
   }
+
   .title {
     text-align: center;
   }

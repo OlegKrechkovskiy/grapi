@@ -20,7 +20,7 @@ interface ChatState {
   setDraft(chatId: string, text: string): void;
   clearDraft(chatId: string): void;
   addOutgoing(chatId: string, text: string, idMessage: string): void;
-  addIncoming(chatId: string, text: string, timestampSec: number): void;
+  addIncoming(chatId: string, text: string, timestampSec: number, senderChatName?: string): void;
   ensureChat(chatId: string): void;
   setError(error: string | null): void;
 }
@@ -68,7 +68,7 @@ export const useChatStore = create<ChatState>()(
           return {
             chats: [
               ...state.chats,
-              { chatId, phone, messages: [], unreadCount: 0 },
+              { chatId, phone, messages: [], senderChatName: '', unreadCount: 0 },
             ],
           };
         }),
@@ -113,7 +113,7 @@ export const useChatStore = create<ChatState>()(
           ),
         })),
 
-      addIncoming: (chatId, text, timestampSec) =>
+      addIncoming: (chatId, text, timestampSec, senderChatName) =>
         set((state) => ({
           chats: state.chats.map((c) =>
             c.chatId === chatId
@@ -128,6 +128,7 @@ export const useChatStore = create<ChatState>()(
                       incoming: true,
                     },
                   ],
+                  senderChatName: senderChatName || '',
                   unreadCount:
                     c.chatId === state.activeChatId
                       ? c.unreadCount
@@ -149,6 +150,7 @@ export const useChatStore = create<ChatState>()(
                 chatId,
                 phone: phoneFromChatId(chatId),
                 messages: [],
+                senderChatName: '',
                 unreadCount: 0,
               },
             ],

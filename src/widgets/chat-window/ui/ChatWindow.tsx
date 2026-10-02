@@ -27,9 +27,10 @@ export const ChatWindow = () => {
   return (
     <section className={st.window}>
       <header className={st.header}>
-        <div className={st.avatar}>{activeChat.phone.charAt(0)}</div>
+        <div className={st.avatar}>{activeChat.senderChatName ? activeChat.senderChatName.charAt(0) : activeChat.phone.charAt(0)}</div>
         <div className={st.info}>
-          <div className={st.name}>{activeChat.phone}</div>
+          {activeChat.senderChatName && <div className={st.name}>{activeChat.senderChatName}</div>}
+          <div className={st.phone}>{activeChat.phone}</div>
         </div>
       </header>
       <MessageList messages={activeChat.messages} />

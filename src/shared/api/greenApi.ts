@@ -10,7 +10,7 @@ export interface IncomingNotification {
     typeWebhook: string;
     senderData?: {
       chatId?: string;
-      senderName?: string;
+      chatName?: string;
     };
     messageData?: {
       typeMessage?: string;
