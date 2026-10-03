@@ -35,7 +35,7 @@ export function ChatList() {
           <span className={st.title}>Чаты</span>
           <div className={st.actions}>
             <button
-              className={st.iconButton}
+              className={`${st.iconButton} ${st.newChat}`}
               type='button'
               aria-label='Новый чат'
               title='Новый чат'

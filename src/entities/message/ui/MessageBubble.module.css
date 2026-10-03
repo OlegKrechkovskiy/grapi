@@ -1,7 +1,8 @@
 .bubble {
+  margin-bottom: 10px;
+  padding: 6px 8px 8px 10px;
   min-width: 160px;
   max-width: 65%;
-  padding: 6px 8px 8px 10px;
   border-radius: 8px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.13);
   position: relative;
@@ -44,4 +45,16 @@
   color: #53bdeb;
   margin-right: 3px;
   font-size: 12px;
+}
+
+@media screen and (max-width:768px) {
+  .bubble {
+    max-width: 80%;
+  }
+}
+
+@media screen and (max-width:500px) {
+  .bubble {
+    max-width: 95%;
+  }
 }

@@ -17,11 +17,13 @@ export const MessageList = ({ messages }: MessageListProps) => {
   }, [messages]);
 
   return (
-    <div className={st.list}>
-      {messages.map((message) => (
-        <MessageBubble key={message.id} message={message} />
-      ))}
-      <div ref={bottomRef} />
+    <div className={st.block}>
+      <div className={st.list}>
+        {messages.map((message) => (
+          <MessageBubble key={message.id} message={message} />
+        ))}
+        <div ref={bottomRef} />
+      </div>
     </div>
   );
 };

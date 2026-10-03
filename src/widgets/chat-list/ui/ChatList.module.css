@@ -31,17 +31,29 @@
 }
 
 .iconButton {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
   border: none;
   border-radius: 50%;
   color: #000000;
   background: transparent;
   font-size: 20px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+}
+
+.newChat {
+  font-size: 30px;
+  color: #ffffff;
+  background: #1daa61;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.newChat:hover {
+  background: #1c9a58;
 }
 
 .list {

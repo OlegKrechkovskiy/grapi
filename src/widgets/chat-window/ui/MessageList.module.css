@@ -1,12 +1,28 @@
-.list {
-  position: relative;
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
+.block {
   flex-direction: column;
-  gap: 6px;
-  padding: 16px;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  position: relative;
+  overflow-y: auto;
   background-color: #ece5dd;
   background-image: url(/wtpp_backgr.svg);
   background-blend-mode: soft-light;
+}
+
+.list {
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px clamp(40px, calc(-20.7143px + 10.1190vw), 57px) 0;
+}
+
+@media screen and (max-width:700px) {
+  .list {
+    padding: 16px clamp(30px, calc(10.0000px + 5.0000vw), 40px) 0px;
+  }
 }
